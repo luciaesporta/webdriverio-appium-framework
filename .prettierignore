@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+out
+coverage
+allure-results
+allure-report
+reports
+apps
+*.log
+package-lock.json

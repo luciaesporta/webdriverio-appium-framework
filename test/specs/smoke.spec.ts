@@ -1,5 +1,5 @@
-import HomePage from '../pages/HomePage.ts';
-import LoginPage from '../pages/LoginPage.ts';
+import HomePage from '../pages/HomePage';
+import LoginPage from '../pages/LoginPage';
 
 describe('Smoke Test - App Launch and Navigation', () => {
   it('should launch the app and show the home screen', async () => {

@@ -30,6 +30,7 @@ mobile-automation/
 ## Prerequisites
 
 To run this project locally, ensure the following are installed and configured:
+
 - **Node.js** (v18 or higher)
 - **Java JDK** (and `JAVA_HOME` environment variable)
 - **Android SDK** (and `ANDROID_HOME` environment variable)
@@ -38,6 +39,7 @@ To run this project locally, ensure the following are installed and configured:
 ## Installation & Execution
 
 1. Clone the repository and install dependencies:
+
    ```bash
    npm install
    ```
@@ -47,7 +49,7 @@ To run this project locally, ensure the following are installed and configured:
    npm run test:smoke
    ```
 
-*Note: The Appium server is automatically managed and launched during the test execution via the `@wdio/appium-service` package.*
+_Note: The Appium server is automatically managed and launched during the test execution via the `@wdio/appium-service` package._
 
 ## Best Practices Implemented
 

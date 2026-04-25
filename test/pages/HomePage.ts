@@ -1,29 +1,23 @@
 class HomePage {
-    /**
-     * Locators
-     */
-    private get tabHome() {
-        return $('~Home');
-    }
+  private get tabHome() {
+    return $('~Home');
+  }
 
-    private get tabLogin() {
-        return $('~Login');
-    }
+  private get tabLogin() {
+    return $('~Login');
+  }
 
-    /**
-     * Actions / Methods
-     */
-    async waitForHomeTab() {
-        await this.tabHome.waitForDisplayed({ timeout: 15000 });
-    }
+  async waitForHomeTab() {
+    await this.tabHome.waitForDisplayed({ timeout: 15000 });
+  }
 
-    async isHomeTabDisplayed() {
-        return await this.tabHome.isDisplayed();
-    }
+  async isHomeTabDisplayed() {
+    return await this.tabHome.isDisplayed();
+  }
 
-    async navigateToLogin() {
-        await this.tabLogin.click();
-    }
+  async navigateToLogin() {
+    await this.tabLogin.click();
+  }
 }
 
 export default new HomePage();

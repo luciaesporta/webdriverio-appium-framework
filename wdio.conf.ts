@@ -1,9 +1,8 @@
 import path from 'path';
-import { Options } from '@wdio/types';
 
 const APK_PATH = path.resolve(__dirname, 'apps', 'android.wdio.native.app.v2.2.0.apk');
 
-export const config: Options.Testrunner = {
+export const config: WebdriverIO.Config = {
   runner: 'local',
   port: 4723,
 
