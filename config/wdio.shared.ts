@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import path from 'path';
-import { saveFailureScreenshot } from '../test/utils/screenshot';
+import { captureFailureArtifacts } from '../test/utils/screenshot';
 
 export const ROOT_DIR = path.resolve(__dirname, '..');
 
@@ -34,7 +34,18 @@ export const sharedConfig: Partial<WebdriverIO.Config> = {
   ],
 
   framework: 'mocha',
-  reporters: ['spec'],
+  reporters: [
+    'spec',
+    [
+      'allure',
+      {
+        outputDir: 'allure-results',
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: false,
+        useCucumberStepReporter: false,
+      },
+    ],
+  ],
 
   mochaOpts: {
     ui: 'bdd',
@@ -44,10 +55,10 @@ export const sharedConfig: Partial<WebdriverIO.Config> = {
   afterTest: async function (test, _context, result) {
     if (!result.passed) {
       try {
-        const filePath = await saveFailureScreenshot(test.title, test.parent);
-        console.info(`[screenshot] saved failure screenshot to ${filePath}`);
+        const filePath = await captureFailureArtifacts(test.title, test.parent);
+        console.info(`[screenshot] saved failure artifact to ${filePath}`);
       } catch (err) {
-        console.error('[screenshot] failed to capture failure screenshot', err);
+        console.error('[screenshot] failed to capture failure artifact', err);
       }
     }
   },

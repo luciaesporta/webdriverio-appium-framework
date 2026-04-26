@@ -1,4 +1,5 @@
 import { BasePage } from './BasePage';
+import { step } from '../utils/allure';
 
 class HomePage extends BasePage {
   private get tabHome() {
@@ -18,7 +19,7 @@ class HomePage extends BasePage {
   }
 
   async navigateToLogin(): Promise<void> {
-    await this.tap(this.tabLogin);
+    await step('Navigate to Login tab', () => this.tap(this.tabLogin));
   }
 }
 

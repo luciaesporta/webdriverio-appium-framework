@@ -1,4 +1,5 @@
 import { BasePage } from './BasePage';
+import { step } from '../utils/allure';
 
 class LoginPage extends BasePage {
   private get inputEmail() {
@@ -30,13 +31,15 @@ class LoginPage extends BasePage {
   }
 
   async login(email: string, password: string): Promise<void> {
-    await this.typeInto(this.inputEmail, email);
-    await this.typeInto(this.inputPassword, password);
-    await this.tap(this.buttonLogin);
+    await step(`Submit login with email "${email}"`, async () => {
+      await this.typeInto(this.inputEmail, email);
+      await this.typeInto(this.inputPassword, password);
+      await this.tap(this.buttonLogin);
+    });
   }
 
   async getLoginAlertText(): Promise<string> {
-    return this.getText(this.loginAlertTitle);
+    return step('Read login result alert text', () => this.getText(this.loginAlertTitle));
   }
 }
 
