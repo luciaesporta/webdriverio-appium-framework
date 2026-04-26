@@ -74,7 +74,7 @@ The full suite runs on every push and pull request via GitHub Actions
 ### One-time setup
 
 1. **Enable GitHub Pages**: in repository settings, navigate to **Settings → Pages** and pick **GitHub Actions** as the source.
-2. **(Optional) Override the APK source**: by default the workflow downloads the public `webdriverio/native-demo-app` v1.0.8 APK. If you maintain your own build, set a repository variable named `APK_DOWNLOAD_URL` (Settings → Secrets and variables → Actions → Variables) pointing to your APK URL.
+2. **(Optional) Override the APK source**: by default the workflow downloads the public `webdriverio/native-demo-app` v2.2.0 APK (the same binary the suite is developed against locally). If you maintain your own build, set a repository variable named `APK_DOWNLOAD_URL` (Settings → Secrets and variables → Actions → Variables) pointing to your APK URL.
 
 After the first successful run on `main`, the latest Allure report is published at:
 

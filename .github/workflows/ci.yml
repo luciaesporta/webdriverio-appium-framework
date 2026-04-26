@@ -52,7 +52,7 @@ jobs:
       ANDROID_AVD: test
       ANDROID_DEVICE_NAME: pixel_6
       ANDROID_PLATFORM_VERSION: '14'
-      APK_DOWNLOAD_URL: ${{ vars.APK_DOWNLOAD_URL || 'https://github.com/webdriverio/native-demo-app/releases/download/v1.0.8/Android-NativeDemoApp-0.4.0.apk' }}
+      APK_DOWNLOAD_URL: ${{ vars.APK_DOWNLOAD_URL || 'https://github.com/webdriverio/native-demo-app/releases/download/v2.2.0/android.wdio.native.app.v2.2.0.apk' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
