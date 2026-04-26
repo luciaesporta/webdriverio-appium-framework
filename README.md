@@ -1,5 +1,8 @@
 # Mobile Automation Framework
 
+[![CI](https://github.com/luciaesporta/webdriverio-appium-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/luciaesporta/webdriverio-appium-framework/actions/workflows/ci.yml)
+[![Allure Report](https://img.shields.io/badge/Allure-report-orange?logo=allure)](https://luciaesporta.github.io/webdriverio-appium-framework/)
+
 A robust, scalable native mobile automation framework built with WebdriverIO, Appium, and TypeScript. This project implements the Page Object Model (POM) design pattern to ensure clean separation of concerns and highly maintainable test code.
 
 ## Tech Stack
@@ -56,3 +59,23 @@ _Note: The Appium server is automatically managed and launched during the test e
 - **Total Abstraction:** Test files never interact directly with raw locators (`~accessibility_id`, `xpath`, etc.). All interactions are delegated to the dedicated Page classes.
 - **Dynamic Waits:** Avoids hardcoded `sleep()` methods. All synchronization relies on built-in dynamic waits (e.g., `waitForDisplayed()`).
 - **Clean Code:** Adheres to strict TypeScript rules with semantic naming conventions to ensure self-documenting test flows.
+
+## Continuous Integration
+
+The full suite runs on every push and pull request via GitHub Actions
+(`.github/workflows/ci.yml`). The pipeline has three jobs:
+
+| Job              | Purpose                                                                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lint`           | TypeScript typecheck, ESLint, and Prettier format check.                                                                                                                   |
+| `test-android`   | Boots an Android x86_64 emulator (API 34, Pixel 6 profile) and runs the full WDIO suite. Allure results, failure screenshots and the Appium log are uploaded as artifacts. |
+| `publish-allure` | On `main`, downloads the Allure results and deploys the generated HTML report to GitHub Pages.                                                                             |
+
+### One-time setup
+
+1. **Enable GitHub Pages**: in repository settings, navigate to **Settings → Pages** and pick **GitHub Actions** as the source.
+2. **(Optional) Override the APK source**: by default the workflow downloads the public `webdriverio/native-demo-app` v1.0.8 APK. If you maintain your own build, set a repository variable named `APK_DOWNLOAD_URL` (Settings → Secrets and variables → Actions → Variables) pointing to your APK URL.
+
+After the first successful run on `main`, the latest Allure report is published at:
+
+`https://<your-username>.github.io/<repo>/`
