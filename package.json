@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm run test:android",
     "test:android": "wdio run config/wdio.android.ts",
-    "test:smoke": "wdio run config/wdio.android.ts --spec test/specs/smoke.spec.ts",
+    "test:smoke": "wdio run config/wdio.android.ts --mochaOpts.grep @smoke",
+    "test:regression": "wdio run config/wdio.android.ts --mochaOpts.grep @regression",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
