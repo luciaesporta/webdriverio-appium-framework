@@ -1,4 +1,6 @@
-class HomePage {
+import { BasePage } from './BasePage';
+
+class HomePage extends BasePage {
   private get tabHome() {
     return $('~Home');
   }
@@ -7,16 +9,16 @@ class HomePage {
     return $('~Login');
   }
 
-  async waitForHomeTab() {
-    await this.tabHome.waitForDisplayed({ timeout: 15000 });
+  async waitForHomeTab(): Promise<void> {
+    await this.waitForVisible(this.tabHome);
   }
 
-  async isHomeTabDisplayed() {
-    return await this.tabHome.isDisplayed();
+  async isHomeTabDisplayed(): Promise<boolean> {
+    return this.isVisible(this.tabHome);
   }
 
-  async navigateToLogin() {
-    await this.tabLogin.click();
+  async navigateToLogin(): Promise<void> {
+    await this.tap(this.tabLogin);
   }
 }
 

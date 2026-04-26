@@ -1,21 +1,18 @@
-# Dependencias
 node_modules/
 
-# Logs
 logs
 *.log
 npm-debug.log*
 appium.log
 
-# Mac OS
 .DS_Store
 
-# Archivos compilados (si llegaras a compilar TypeScript)
+
 dist/
 build/
 out/
 
-# Reportes y capturas (para el futuro)
+
 allure-results/
 allure-report/
 coverage/
@@ -23,7 +20,11 @@ reports/
 *.png
 *.mp4
 
-# Aplicaciones binarias (Exceden límite de GitHub)
 *.apk
 *.ipa
+
+.env
+.env.local
+
+screenshots/
 

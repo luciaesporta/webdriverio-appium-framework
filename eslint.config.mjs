@@ -22,10 +22,10 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     ...wdioPlugin.configs['flat/recommended'],
-    files: ['test/**/*.ts', 'wdio.conf.ts', 'config/**/*.ts'],
+    files: ['test/**/*.ts', 'config/**/*.ts'],
   },
   {
-    files: ['test/**/*.ts', 'wdio.conf.ts', 'config/**/*.ts'],
+    files: ['test/**/*.ts', 'config/**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [

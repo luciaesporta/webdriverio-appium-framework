@@ -23,7 +23,7 @@
     },
     "types": ["node", "mocha", "@wdio/globals/types", "expect-webdriverio"]
   },
-  "include": ["test/**/*.ts", "wdio.conf.ts", "config/**/*.ts"],
+  "include": ["test/**/*.ts", "config/**/*.ts"],
   "exclude": ["node_modules", "dist", "allure-results", "allure-report"],
   "ts-node": {
     "transpileOnly": true,
