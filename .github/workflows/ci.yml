@@ -49,9 +49,11 @@ jobs:
       matrix:
         api-level: [34]
     env:
-      ANDROID_AVD: test
-      ANDROID_DEVICE_NAME: pixel_6
-      ANDROID_PLATFORM_VERSION: '14'
+      # The emulator is already booted by reactivecircus/android-emulator-runner,
+      # so we do NOT set ANDROID_AVD / ANDROID_PLATFORM_VERSION — letting those
+      # caps be undefined makes Appium connect to the running device via adb
+      # instead of trying to relaunch the AVD itself.
+      ANDROID_DEVICE_NAME: emulator-5554
       APK_DOWNLOAD_URL: ${{ vars.APK_DOWNLOAD_URL || 'https://github.com/webdriverio/native-demo-app/releases/download/v2.2.0/android.wdio.native.app.v2.2.0.apk' }}
     steps:
       - name: Checkout
