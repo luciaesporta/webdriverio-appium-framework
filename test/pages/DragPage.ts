@@ -1,4 +1,4 @@
-import { BasePage } from './BasePage';
+import { BaseScreen } from './BaseScreen';
 import { step } from '../utils/allure';
 
 type Cell = 'l1' | 'l2' | 'l3' | 'c1' | 'c2' | 'c3' | 'r1' | 'r2' | 'r3';
@@ -8,8 +8,8 @@ interface Point {
   y: number;
 }
 
-class DragPage extends BasePage {
-  private get screen() {
+class DragPage extends BaseScreen {
+  protected get screen() {
     return $('~Drag-drop-screen');
   }
 
@@ -19,10 +19,6 @@ class DragPage extends BasePage {
 
   private dropTarget(cell: Cell) {
     return $(`~drop-${cell}`);
-  }
-
-  async waitForLoaded(): Promise<void> {
-    await this.waitForVisible(this.screen);
   }
 
   private async centerOf(cell: Cell, kind: 'drag' | 'drop'): Promise<Point> {

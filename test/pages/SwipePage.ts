@@ -1,17 +1,13 @@
-import { BasePage } from './BasePage';
+import { BaseScreen } from './BaseScreen';
 import { step } from '../utils/allure';
 
-class SwipePage extends BasePage {
-  private get screen() {
+class SwipePage extends BaseScreen {
+  protected get screen() {
     return $('~Swipe-screen');
   }
 
   private get card() {
     return $('~card');
-  }
-
-  async waitForLoaded(): Promise<void> {
-    await this.waitForVisible(this.screen);
   }
 
   async swipeCardLeft(): Promise<void> {

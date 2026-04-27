@@ -1,8 +1,8 @@
-import { BasePage } from './BasePage';
+import { BaseScreen } from './BaseScreen';
 import { step } from '../utils/allure';
 
-class LoginPage extends BasePage {
-  private get screen() {
+class LoginPage extends BaseScreen {
+  protected get screen() {
     return $('~Login-screen');
   }
 
@@ -34,10 +34,6 @@ class LoginPage extends BasePage {
     return $(
       '//android.widget.TextView[contains(@text,"at least") and contains(@text,"characters")]',
     );
-  }
-
-  async waitForLoaded(): Promise<void> {
-    await this.waitForVisible(this.screen);
   }
 
   async isEmailInputDisplayed(): Promise<boolean> {

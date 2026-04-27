@@ -1,8 +1,8 @@
-import { BasePage } from './BasePage';
+import { BaseScreen } from './BaseScreen';
 import { step } from '../utils/allure';
 
-class FormsPage extends BasePage {
-  private get screen() {
+class FormsPage extends BaseScreen {
+  protected get screen() {
     return $('~Forms-screen');
   }
 
@@ -20,10 +20,6 @@ class FormsPage extends BasePage {
 
   private get switchText() {
     return $('~switch-text');
-  }
-
-  async waitForLoaded(): Promise<void> {
-    await this.waitForVisible(this.screen);
   }
 
   async typeText(text: string): Promise<void> {

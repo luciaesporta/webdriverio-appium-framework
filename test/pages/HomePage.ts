@@ -1,16 +1,12 @@
-import { BasePage } from './BasePage';
+import { BaseScreen } from './BaseScreen';
 
-class HomePage extends BasePage {
-  private get homeScreen() {
+class HomePage extends BaseScreen {
+  protected get screen() {
     return $('~Home-screen');
   }
 
-  async waitForLoaded(): Promise<void> {
-    await this.waitForVisible(this.homeScreen);
-  }
-
   async isLoaded(): Promise<boolean> {
-    return this.isVisible(this.homeScreen);
+    return this.isVisible(this.screen);
   }
 }
 
