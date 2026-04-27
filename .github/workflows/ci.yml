@@ -74,6 +74,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Appium UiAutomator2 driver
+        run: npx appium driver install uiautomator2
+
       - name: Download APK under test
         run: |
           mkdir -p apps

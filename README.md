@@ -47,12 +47,18 @@ To run this project locally, ensure the following are installed and configured:
    npm install
    ```
 
-2. Run the smoke test suite:
+2. Install the Appium UiAutomator2 driver (one-time per machine — stored under `~/.appium`):
+
+   ```bash
+   npm run appium:setup
+   ```
+
+3. Run the smoke test suite:
    ```bash
    npm run test:smoke
    ```
 
-_Note: The Appium server is automatically managed and launched during the test execution via the `@wdio/appium-service` package._
+_Note: The Appium server is bundled as a local dev dependency and is automatically managed by `@wdio/appium-service` during test execution — no global install required._
 
 ## Best Practices Implemented
 
