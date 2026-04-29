@@ -14,7 +14,6 @@ class WebviewPage extends BaseScreen {
     await this.waitForWebviewContext();
   }
 
-
   async getCurrentContext(): Promise<string> {
     const ctx = (await browser.getContext()) as ContextHandle | null | undefined;
     if (!ctx) return '';
