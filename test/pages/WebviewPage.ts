@@ -10,6 +10,11 @@ class WebviewPage extends BaseScreen {
     return $('~Webview-screen');
   }
 
+  async waitForLoaded(): Promise<void> {
+    await this.waitForWebviewContext();
+  }
+
+
   async getCurrentContext(): Promise<string> {
     const ctx = (await browser.getContext()) as ContextHandle | null | undefined;
     if (!ctx) return '';
