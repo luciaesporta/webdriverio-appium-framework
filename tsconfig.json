@@ -21,8 +21,7 @@
       "@pages/*": ["test/pages/*"],
       "@specs/*": ["test/specs/*"],
       "@utils/*": ["test/utils/*"],
-      "@data/*": ["test/data/*"],
-      "@fixtures/*": ["test/fixtures/*"]
+      "@data/*": ["test/data/*"]
     },
     "types": ["node", "mocha", "@wdio/globals/types", "expect-webdriverio"]
   },
