@@ -40,6 +40,9 @@ jobs:
       - name: Format check
         run: npm run format:check
 
+      - name: Unit tests
+        run: npm run test:unit
+
   test-android:
     name: Android tests (API ${{ matrix.api-level }})
     runs-on: ubuntu-latest

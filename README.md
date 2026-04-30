@@ -105,6 +105,7 @@ adb wait-for-device
 | `npm run test:ci`         | CI run (`wdio.android.ci.conf.ts` — `emulator-5554`)    |
 | `npm run test:smoke`      | Only `@smoke`-tagged tests (fast feedback)              |
 | `npm run test:regression` | Only `@regression`-tagged tests                         |
+| `npm run test:unit`       | Vitest unit tests (gesture helpers, no emulator needed) |
 | `npm run lint`            | ESLint over `test/` and `config/`                       |
 | `npm run lint:fix`        | ESLint with autofix                                     |
 | `npm run format`          | Prettier write                                          |
