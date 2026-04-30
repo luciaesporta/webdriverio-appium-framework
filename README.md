@@ -101,6 +101,8 @@ adb wait-for-device
 | Script                    | What it does                                            |
 | ------------------------- | ------------------------------------------------------- |
 | `npm test`                | Full suite on Android (delegates to `test:android`)     |
+| `npm run test:android`    | Local run (`wdio.android.local.conf.ts` — Pixel_7 AVD)  |
+| `npm run test:ci`         | CI run (`wdio.android.ci.conf.ts` — `emulator-5554`)    |
 | `npm run test:smoke`      | Only `@smoke`-tagged tests (fast feedback)              |
 | `npm run test:regression` | Only `@regression`-tagged tests                         |
 | `npm run lint`            | ESLint over `test/` and `config/`                       |

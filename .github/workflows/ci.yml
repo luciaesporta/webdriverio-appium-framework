@@ -125,7 +125,7 @@ jobs:
           disable-animations: true
           script: |
             adb shell settings put global hide_error_dialogs 1
-            npm test
+            npm run test:ci
 
       - name: Upload Allure results
         if: always()
