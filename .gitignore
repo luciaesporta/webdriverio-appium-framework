@@ -19,6 +19,7 @@ coverage/
 reports/
 *.png
 *.mp4
+!docs/*.png
 
 *.apk
 *.ipa

@@ -5,6 +5,10 @@
 
 End-to-end mobile automation framework for Android, built on WebdriverIO v9, Appium 3 and TypeScript using the Page Object Model. Runs locally against a Pixel 7 emulator and on every push via GitHub Actions, with Allure reports published to GitHub Pages.
 
+[![Allure report](docs/allure-report.png)](https://luciaesporta.github.io/webdriverio-appium-framework/)
+
+> Live report: [luciaesporta.github.io/webdriverio-appium-framework](https://luciaesporta.github.io/webdriverio-appium-framework/) — auto-deployed by CI on every push to `main`.
+
 ## Stack
 
 | Layer          | Choice                                                                               |
@@ -80,7 +84,7 @@ mobile-automation/
 git clone https://github.com/luciaesporta/webdriverio-appium-framework.git
 cd webdriverio-appium-framework
 npm ci
-cp .env.example .env           
+cp .env.example .env
 ```
 
 The Appium server and the UiAutomator2 driver are bundled as dev dependencies, so no global install is needed. The APK is downloaded by CI from the `webdriverio/native-demo-app` v2.2.0 release; for local runs, drop the same `.apk` in `apps/` (or set `APK_PATH` in `.env`).
@@ -177,7 +181,6 @@ Allure results, failure screenshots and the Appium log are uploaded as artifacts
 ### Adding a new spec
 
 ```ts
-
 import SettingsPage from '@pages/SettingsPage';
 import NavBar from '@pages/NavBar';
 
