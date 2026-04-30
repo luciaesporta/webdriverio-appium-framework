@@ -230,4 +230,4 @@ The driver is bundled as a dev dependency — `npm ci` installs it. Don't run `a
 
 ## License
 
-ISC. See [`package.json`](./package.json).
+ISC. See [`LICENSE`](./LICENSE).
