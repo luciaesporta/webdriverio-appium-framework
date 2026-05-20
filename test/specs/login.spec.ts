@@ -45,6 +45,13 @@ const cases: LoginCase[] = [
   },
   {
     tag: '@regression',
+    title: 'shows an inline error only on the password field when password is missing',
+    email: validUser.email,
+    password: '',
+    expect: { kind: 'inline', emailError: false, passwordError: true },
+  },
+  {
+    tag: '@regression',
     title: 'shows inline errors for empty credentials',
     email: '',
     password: '',
