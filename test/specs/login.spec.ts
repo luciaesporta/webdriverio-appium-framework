@@ -5,6 +5,7 @@ import {
   shortPasswordUser,
   validUser,
   whitespaceEmailUser,
+  whitespacePasswordUser,
 } from '@data/users';
 
 type Expectation =
@@ -47,6 +48,13 @@ const cases: LoginCase[] = [
     email: whitespaceEmailUser.email,
     password: whitespaceEmailUser.password,
     expect: { kind: 'inline', emailError: true, passwordError: false },
+  },
+  {
+    tag: '@regression',
+    title: 'accepts a password with leading or trailing whitespace literally',
+    email: whitespacePasswordUser.email,
+    password: whitespacePasswordUser.password,
+    expect: { kind: 'alert', title: 'Success' },
   },
   {
     tag: '@regression',
