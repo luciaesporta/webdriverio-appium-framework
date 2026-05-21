@@ -84,6 +84,31 @@ class LoginPage extends BaseScreen {
     await step('Focus the email input', () => this.tap(this.inputEmail));
   }
 
+  async setEmail(value: string): Promise<void> {
+    await step(`Set email to ${JSON.stringify(value)}`, async () => {
+      await this.waitForVisible(this.inputEmail);
+      await this.inputEmail.clearValue();
+      if (value) {
+        await this.inputEmail.setValue(value);
+      }
+    });
+  }
+
+  async setPassword(value: string): Promise<void> {
+    await step(`Set password (length=${value.length})`, async () => {
+      await this.waitForVisible(this.inputPassword);
+      await this.inputPassword.clearValue();
+      if (value) {
+        await this.inputPassword.setValue(value);
+      }
+    });
+  }
+
+  async isLoginButtonEnabled(): Promise<boolean> {
+    await this.waitForVisible(this.buttonLogin);
+    return this.buttonLogin.isEnabled();
+  }
+
   async tapAboveInputs(): Promise<void> {
     await step('Tap on a neutral area above the inputs', async () => {
       await this.waitForVisible(this.inputEmail);

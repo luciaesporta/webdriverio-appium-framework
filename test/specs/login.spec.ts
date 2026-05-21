@@ -109,4 +109,14 @@ describe('Login form', () => {
     await LoginPage.waitForKeyboardHidden();
     expect(await browser.isKeyboardShown()).toBe(false);
   });
+
+  it('@regression keeps the LOGIN button disabled until both fields are filled', async () => {
+    expect(await LoginPage.isLoginButtonEnabled()).toBe(false);
+
+    await LoginPage.setEmail(validUser.email);
+    expect(await LoginPage.isLoginButtonEnabled()).toBe(false);
+
+    await LoginPage.setPassword(validUser.password);
+    expect(await LoginPage.isLoginButtonEnabled()).toBe(true);
+  });
 });
