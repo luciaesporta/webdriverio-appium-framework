@@ -1,6 +1,11 @@
 import LoginPage from '@pages/LoginPage';
 import NavBar from '@pages/NavBar';
-import { invalidEmailUser, shortPasswordUser, validUser } from '@data/users';
+import {
+  invalidEmailUser,
+  shortPasswordUser,
+  validUser,
+  whitespaceEmailUser,
+} from '@data/users';
 
 type Expectation =
   | { kind: 'alert'; title: string }
@@ -35,6 +40,13 @@ const cases: LoginCase[] = [
     email: shortPasswordUser.email,
     password: shortPasswordUser.password,
     expect: { kind: 'inline', emailError: false, passwordError: true },
+  },
+  {
+    tag: '@regression',
+    title: 'rejects an email with leading or trailing whitespace as invalid format',
+    email: whitespaceEmailUser.email,
+    password: whitespaceEmailUser.password,
+    expect: { kind: 'inline', emailError: true, passwordError: false },
   },
   {
     tag: '@regression',
