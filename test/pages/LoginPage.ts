@@ -80,6 +80,23 @@ class LoginPage extends BaseScreen {
     return this.passwordError.isExisting();
   }
 
+  async submitAndReadAlertTitle(email: string, password: string): Promise<string> {
+    await this.login(email, password);
+    await this.waitForAlert();
+    return this.getAlertTitle();
+  }
+
+  async submitAndReadInlineErrors(
+    email: string,
+    password: string,
+  ): Promise<{ email: boolean; password: boolean }> {
+    await this.login(email, password);
+    return {
+      email: await this.hasEmailError(),
+      password: await this.hasPasswordError(),
+    };
+  }
+
   async focusEmailInput(): Promise<void> {
     await step('Focus the email input', () => this.tap(this.inputEmail));
   }
