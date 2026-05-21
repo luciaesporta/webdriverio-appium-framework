@@ -1,5 +1,6 @@
 import { BaseScreen } from './BaseScreen';
 import { step } from '../utils/allure';
+import { tapAt } from '../utils/gestures';
 
 class LoginPage extends BaseScreen {
   protected get screen() {
@@ -77,6 +78,36 @@ class LoginPage extends BaseScreen {
 
   async hasPasswordError(): Promise<boolean> {
     return this.passwordError.isExisting();
+  }
+
+  async focusEmailInput(): Promise<void> {
+    await step('Focus the email input', () => this.tap(this.inputEmail));
+  }
+
+  async tapAboveInputs(): Promise<void> {
+    await step('Tap on a neutral area above the inputs', async () => {
+      await this.waitForVisible(this.inputEmail);
+      const rect = await this.inputEmail.getElementRect(await this.inputEmail.elementId);
+      const x = rect.x + Math.round(rect.width / 2);
+      const y = Math.max(rect.y - 100, 1);
+      await tapAt(x, y);
+    });
+  }
+
+  async waitForKeyboardShown(timeout = 5_000): Promise<void> {
+    await browser.waitUntil(async () => browser.isKeyboardShown(), {
+      timeout,
+      interval: 200,
+      timeoutMsg: 'Keyboard did not appear in time',
+    });
+  }
+
+  async waitForKeyboardHidden(timeout = 5_000): Promise<void> {
+    await browser.waitUntil(async () => !(await browser.isKeyboardShown()), {
+      timeout,
+      interval: 200,
+      timeoutMsg: 'Keyboard did not hide in time',
+    });
   }
 }
 

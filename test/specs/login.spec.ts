@@ -99,4 +99,14 @@ describe('Login form', () => {
       }
     });
   }
+
+  it('@regression closes the keyboard when tapping outside the input', async () => {
+    await LoginPage.focusEmailInput();
+    await LoginPage.waitForKeyboardShown();
+    expect(await browser.isKeyboardShown()).toBe(true);
+
+    await LoginPage.tapAboveInputs();
+    await LoginPage.waitForKeyboardHidden();
+    expect(await browser.isKeyboardShown()).toBe(false);
+  });
 });
