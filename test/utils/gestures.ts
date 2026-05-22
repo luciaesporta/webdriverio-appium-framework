@@ -56,16 +56,6 @@ export async function swipeDown(el: ChainablePromiseElement): Promise<void> {
   await performSwipe({ x: midX, y: startY }, { x: midX, y: endY });
 }
 
-export async function tapAt(x: number, y: number): Promise<void> {
-  await browser
-    .action('pointer', { parameters: { pointerType: 'touch' } })
-    .move({ x, y })
-    .down()
-    .pause(50)
-    .up()
-    .perform();
-}
-
 export async function longPress(el: ChainablePromiseElement, durationMs = 1000): Promise<void> {
   const { x, y, width, height } = await elementRect(el);
   const cx = x + Math.round(width / 2);

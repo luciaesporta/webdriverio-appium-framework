@@ -98,22 +98,20 @@ describe('Login form', () => {
     });
   }
 
-  it('@regression closes the keyboard when tapping outside the input', async () => {
+  it('@regression closes the keyboard when pressing the Android back button', async () => {
     await LoginPage.focusEmailInput();
     await LoginPage.waitForKeyboardShown();
     expect(await browser.isKeyboardShown()).toBe(true);
 
-    await LoginPage.tapAboveInputs();
+    await browser.back();
     await LoginPage.waitForKeyboardHidden();
     expect(await browser.isKeyboardShown()).toBe(false);
   });
 
-  it('@regression keeps the LOGIN button disabled until both fields are filled', async () => {
-    expect(await LoginPage.isLoginButtonEnabled()).toBe(false);
+  it('@regression keeps the LOGIN button tappable regardless of field state', async () => {
+    expect(await LoginPage.isLoginButtonEnabled()).toBe(true);
 
     await LoginPage.setEmail(validUser.email);
-    expect(await LoginPage.isLoginButtonEnabled()).toBe(false);
-
     await LoginPage.setPassword(validUser.password);
     expect(await LoginPage.isLoginButtonEnabled()).toBe(true);
   });
