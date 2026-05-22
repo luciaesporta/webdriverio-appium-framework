@@ -108,6 +108,14 @@ describe('Login form', () => {
     expect(await browser.isKeyboardShown()).toBe(false);
   });
 
+  it('@regression shows no-biometrics-enrolled modal when toggling biometrics', async () => {
+    await LoginPage.toggleBiometrics();
+    await LoginPage.waitForAlert();
+    const title = await LoginPage.getAlertTitle();
+    expect(title).toContain('Biometrics');
+    await LoginPage.dismissAlert();
+  });
+
   it('@regression keeps the LOGIN button tappable regardless of field state', async () => {
     expect(await LoginPage.isLoginButtonEnabled()).toBe(true);
 

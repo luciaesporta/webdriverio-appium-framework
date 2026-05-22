@@ -26,6 +26,10 @@ class LoginPage extends BaseScreen {
     return $('id=android:id/button1');
   }
 
+  private get biometricsSwitch() {
+    return $('~Biometrics');
+  }
+
   private get emailError() {
     return $('//android.widget.TextView[contains(@text,"valid email")]');
   }
@@ -123,6 +127,16 @@ class LoginPage extends BaseScreen {
   async isLoginButtonEnabled(): Promise<boolean> {
     await this.waitForVisible(this.buttonLogin);
     return this.buttonLogin.isEnabled();
+  }
+
+  async toggleBiometrics(): Promise<void> {
+    await step('Toggle biometrics switch', () => this.tap(this.biometricsSwitch));
+  }
+
+  async getAlertMessage(): Promise<string> {
+    const alertMessage = $('id=android:id/message');
+    await this.waitForVisible(alertMessage);
+    return this.getText(alertMessage);
   }
 
   async waitForKeyboardShown(timeout = 5_000): Promise<void> {
