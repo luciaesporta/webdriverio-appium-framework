@@ -34,4 +34,3 @@ export const signUpUser: DemoUser = {
 };
 
 export const mismatchedPassword = 'Wr0ng!Pass';
-
