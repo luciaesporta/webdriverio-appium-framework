@@ -27,3 +27,8 @@ export const whitespacePasswordUser: DemoUser = {
   email: 'qa.tester@example.com',
   password: ' P@ssw0rd! ',
 };
+
+export const signUpUser: DemoUser = {
+  email: 'new.user@example.com',
+  password: 'P@ssw0rd!',
+};
