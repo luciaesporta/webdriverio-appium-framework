@@ -32,3 +32,6 @@ export const signUpUser: DemoUser = {
   email: 'new.user@example.com',
   password: 'P@ssw0rd!',
 };
+
+export const mismatchedPassword = 'Wr0ng!Pass';
+

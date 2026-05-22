@@ -35,6 +35,10 @@ class SignUpPage extends BaseScreen {
     return $('id=android:id/button1');
   }
 
+  private get repeatPasswordError() {
+    return $('//android.widget.TextView[contains(@text,"same password")]');
+  }
+
   async open(): Promise<void> {
     await step('Open Sign Up form', async () => {
       await NavBar.goTo('Login');
@@ -75,6 +79,21 @@ class SignUpPage extends BaseScreen {
 
   async dismissAlert(): Promise<void> {
     await step('Dismiss sign up alert', () => this.tap(this.alertOkButton));
+  }
+
+  async hasRepeatPasswordError(): Promise<boolean> {
+    return this.repeatPasswordError.isExisting();
+  }
+
+  async submitAndReadInlineErrors(
+    email: string,
+    password: string,
+    repeatPassword: string,
+  ): Promise<{ repeatPassword: boolean }> {
+    await this.signUp(email, password, repeatPassword);
+    return {
+      repeatPassword: await this.hasRepeatPasswordError(),
+    };
   }
 }
 

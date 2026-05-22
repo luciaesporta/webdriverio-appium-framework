@@ -1,5 +1,5 @@
 import SignUpPage from '@pages/SignUpPage';
-import { signUpUser } from '@data/users';
+import { signUpUser, mismatchedPassword } from '@data/users';
 
 describe('Sign up form', () => {
   beforeEach(async () => {
@@ -14,5 +14,14 @@ describe('Sign up form', () => {
     );
     expect(title).toBe('Signed Up!');
     await SignUpPage.dismissAlert();
+  });
+
+  it('@regression shows inline error when passwords do not match', async () => {
+    const errors = await SignUpPage.submitAndReadInlineErrors(
+      signUpUser.email,
+      signUpUser.password,
+      mismatchedPassword,
+    );
+    expect(errors.repeatPassword).toBe(true);
   });
 });
