@@ -130,7 +130,10 @@ class LoginPage extends BaseScreen {
   }
 
   async toggleBiometrics(): Promise<void> {
-    await step('Toggle biometrics switch', () => this.tap(this.biometricsSwitch));
+    await step('Toggle biometrics switch', async () => {
+      await this.scrollTo(this.biometricsSwitch);
+      await this.tap(this.biometricsSwitch);
+    });
   }
 
   async getAlertMessage(): Promise<string> {

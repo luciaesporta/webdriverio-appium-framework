@@ -35,6 +35,12 @@ export abstract class BasePage {
     return el.getText();
   }
 
+  protected async scrollTo(selector: Selector, timeout = this.defaultTimeout): Promise<void> {
+    const el = this.$el(selector);
+    await el.waitForExist({ timeout });
+    await el.scrollIntoView();
+  }
+
   protected async isVisible(selector: Selector): Promise<boolean> {
     return this.$el(selector).isDisplayed();
   }
