@@ -99,14 +99,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-default-v1
+          key: avd-${{ matrix.api-level }}-v6
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: google_apis
           arch: x86_64
           profile: pixel_6
           force-avd-creation: false
@@ -122,7 +122,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: default
+          target: google_apis
           arch: x86_64
           profile: pixel_6
           force-avd-creation: false
@@ -132,9 +132,24 @@ jobs:
             adb shell settings put global hide_error_dialogs 1
             adb root
             adb shell locksettings set-pin 0000
-            adb shell setprop persist.vendor.fingerprint.virtual.enrollments 1
-            adb shell cmd fingerprint sync
-            sleep 2
+            mkdir -p screenshots
+            adb shell am start -a android.settings.FINGERPRINT_ENROLL
+            sleep 10
+            adb exec-out screencap -p > screenshots/enroll_01_intro.png || true
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep -i "button\|agree\|next\|text=" | head -20 || true
+            adb shell input tap 540 2100
+            sleep 4
+            adb exec-out screencap -p > screenshots/enroll_02_after_btn.png || true
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep -i "pin\|password\|confirm\|button\|text=" | head -20 || true
+            adb shell input keyevent 7 && adb shell input keyevent 7 && adb shell input keyevent 7 && adb shell input keyevent 7
+            sleep 4
+            adb exec-out screencap -p > screenshots/enroll_03_after_pin.png || true
+            for i in $(seq 1 25); do adb -e emu finger touch 1; sleep 0.5; done
+            adb exec-out screencap -p > screenshots/enroll_04_after_touch.png || true
+            sleep 1
+            adb shell input tap 540 2100
+            sleep 1
+            adb shell input keyevent 3
             echo "=== Fingerprint enrollment status ==="
             adb shell dumpsys fingerprint 2>&1 | head -5
             npm run test:ci
