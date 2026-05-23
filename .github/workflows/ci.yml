@@ -99,7 +99,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-v6
+          key: avd-${{ matrix.api-level }}-v3
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -114,9 +114,7 @@ jobs:
           disable-animations: false
           script: |
             adb shell settings put global hide_error_dialogs 1
-            adb shell settings put global stay_on_while_plugged_in 3
-            adb shell settings put system screen_off_timeout 2147483647
-            echo "AVD snapshot generated (no PIN — enrollment done at run time)"
+            echo "AVD snapshot generated"
 
       - name: Run WDIO suite on emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -130,54 +128,6 @@ jobs:
           disable-animations: true
           script: |
             adb shell settings put global hide_error_dialogs 1
-            adb root
-            sleep 3
-            adb shell locksettings set-pin 0000
-            sleep 2
-            adb shell wm dismiss-keyguard
-            sleep 1
-            mkdir -p screenshots
-            adb shell am start -a android.settings.FINGERPRINT_ENROLL
-            sleep 8
-            adb exec-out screencap -p > screenshots/enroll_01_pin.png || true
-            echo "=== Entering PIN 0000 on keyboard ==="
-            adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249
-            sleep 1
-            echo "=== Submitting PIN (Enter key) ==="
-            adb shell input tap 900 2249
-            sleep 4
-            adb exec-out screencap -p > screenshots/enroll_02_intro.png || true
-            echo "=== Tapping MORE → I AGREE on intro ==="
-            adb shell input tap 911 2242 && sleep 2 && adb shell input tap 911 2242 && sleep 2 && adb shell input tap 911 2242 && sleep 2 && adb shell input tap 911 2242
-            sleep 4
-            adb exec-out screencap -p > screenshots/enroll_03_find_sensor.png || true
-            echo "=== Screen before touches ==="
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
-            echo "=== Enrolling fingerprint ==="
-            for i in $(seq 1 25); do adb -e emu finger touch 1; sleep 0.5; done
-            sleep 2
-            adb exec-out screencap -p > screenshots/enroll_04_after_touch.png || true
-            echo "=== Screen after touches ==="
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
-            adb shell input tap 911 2242
-            sleep 1
-            adb shell input keyevent 3
-            echo "=== Fingerprint enrollment status ==="
-            adb shell dumpsys fingerprint 2>&1 | head -10
-            echo "=== BiometricManager state ==="
-            adb shell dumpsys biometric 2>&1 | head -20 || true
-            echo "=== Fingerprint feature ==="
-            adb shell pm list features 2>/dev/null | grep -i finger || true
-            echo "=== Checking app biometrics toggle ==="
-            adb install -r "apps/${APK_FILE:-android.wdio.native.app.v2.2.0.apk}" 2>/dev/null || true
-            adb shell am start -n com.wdiodemoapp/.MainActivity
-            sleep 8
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep -i "content-desc=\"Login\"" | head -3 || true
-            adb shell input tap 450 2300
-            sleep 3
-            echo "=== Login screen elements ==="
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep -i "biometric\|switch\|Biometrics\|content-desc" | head -20 || true
-            adb shell am force-stop com.wdiodemoapp
             npm run test:ci
 
       - name: Upload Allure results
