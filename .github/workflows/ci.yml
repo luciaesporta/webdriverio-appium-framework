@@ -164,6 +164,20 @@ jobs:
             adb shell input keyevent 3
             echo "=== Fingerprint enrollment status ==="
             adb shell dumpsys fingerprint 2>&1 | head -10
+            echo "=== BiometricManager state ==="
+            adb shell dumpsys biometric 2>&1 | head -20 || true
+            echo "=== Fingerprint feature ==="
+            adb shell pm list features 2>/dev/null | grep -i finger || true
+            echo "=== Checking app biometrics toggle ==="
+            adb install -r "apps/${APK_FILE:-android.wdio.native.app.v2.2.0.apk}" 2>/dev/null || true
+            adb shell am start -n com.wdiodemoapp/.MainActivity
+            sleep 8
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep -i "content-desc=\"Login\"" | head -3 || true
+            adb shell input tap 450 2300
+            sleep 3
+            echo "=== Login screen elements ==="
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep -i "biometric\|switch\|Biometrics\|content-desc" | head -20 || true
+            adb shell am force-stop com.wdiodemoapp
             npm run test:ci
 
       - name: Upload Allure results
