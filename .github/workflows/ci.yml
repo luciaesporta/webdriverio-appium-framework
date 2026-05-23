@@ -99,7 +99,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-v3
+          key: avd-${{ matrix.api-level }}-v4
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -114,6 +114,10 @@ jobs:
           disable-animations: false
           script: |
             adb shell settings put global hide_error_dialogs 1
+            adb root
+            adb shell locksettings set-pin 0000
+            adb shell setprop persist.vendor.fingerprint.virtual.enrollments 1
+            adb shell cmd fingerprint sync
             echo "AVD snapshot generated"
 
       - name: Run WDIO suite on emulator
@@ -128,6 +132,11 @@ jobs:
           disable-animations: true
           script: |
             adb shell settings put global hide_error_dialogs 1
+            adb root
+            adb shell locksettings set-pin 0000
+            adb shell setprop persist.vendor.fingerprint.virtual.enrollments 1
+            adb shell cmd fingerprint sync
+            sleep 2
             npm run test:ci
 
       - name: Upload Allure results
