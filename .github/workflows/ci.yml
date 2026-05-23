@@ -116,9 +116,19 @@ jobs:
             adb shell settings put global hide_error_dialogs 1
             adb root
             adb shell locksettings set-pin 0000
-            adb shell setprop persist.vendor.fingerprint.virtual.enrollments 1
-            adb shell cmd fingerprint sync
-            echo "AVD snapshot generated"
+            adb shell am start -a android.settings.FINGERPRINT_ENROLL
+            sleep 4
+            adb shell input tap 540 2200
+            sleep 3
+            adb shell input text 0000
+            adb shell input keyevent 66
+            sleep 3
+            for i in $(seq 1 20); do adb -e emu finger touch 1; sleep 0.5; done
+            sleep 1
+            adb shell input tap 540 2200
+            sleep 1
+            adb shell input keyevent 3
+            echo "AVD snapshot generated with fingerprint enrollment"
 
       - name: Run WDIO suite on emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -133,37 +143,22 @@ jobs:
           script: |
             adb shell settings put global hide_error_dialogs 1
             adb root
-
-            echo "=== Fingerprint diagnostics ==="
-            adb shell pm list features | grep -iE "finger|biometric" || echo "No fingerprint/biometric features found"
-            adb shell getprop | grep -i fingerprint || echo "No fingerprint props found"
-            adb shell cmd fingerprint help 2>&1 || echo "cmd fingerprint not available"
-            adb shell dumpsys fingerprint 2>&1 | head -30 || echo "dumpsys fingerprint not available"
-            echo "=== End diagnostics ==="
-
-            adb shell locksettings set-pin --old 0000 0000 2>/dev/null || true
-
-            echo "=== Attempting fingerprint enrollment via Settings ==="
             adb shell am start -a android.settings.FINGERPRINT_ENROLL
+            sleep 4
+            adb shell input tap 540 2200
             sleep 3
             adb shell input text 0000
             adb shell input keyevent 66
-            sleep 2
-            for i in $(seq 1 20); do
-              adb -e emu finger touch 1
-              sleep 0.5
-            done
-            adb shell input keyevent 66
+            sleep 3
+            for i in $(seq 1 20); do adb -e emu finger touch 1; sleep 0.5; done
             sleep 1
-            adb shell input keyevent 66
+            adb shell input tap 540 2200
             sleep 1
-            adb shell input keyevent 4
+            adb shell input keyevent 3
             sleep 1
-            adb shell input keyevent 4
-            echo "=== Enrollment attempt done ==="
-
-            adb shell dumpsys fingerprint 2>&1 | head -30 || true
-
+            echo "=== Fingerprint enrollment status ==="
+            adb shell dumpsys fingerprint 2>&1 | head -5
+            echo "=== Running tests ==="
             npm run test:ci
 
       - name: Upload Allure results
