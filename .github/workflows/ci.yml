@@ -137,30 +137,29 @@ jobs:
             adb shell wm dismiss-keyguard
             sleep 1
             mkdir -p screenshots
-            echo "=== cmd fingerprint help ==="
-            adb shell cmd fingerprint help 2>&1 || true
             adb shell am start -a android.settings.FINGERPRINT_ENROLL
             sleep 8
             adb exec-out screencap -p > screenshots/enroll_01_pin.png || true
-            echo "=== Clickable elements on PIN screen ==="
-            adb shell uiautomator dump /dev/tty 2>/dev/null | tr '>' '\n' | grep 'clickable="true"' || true
-            echo "=== Tapping PIN 0 button at (540,2249) x4 ==="
+            echo "=== PIN screen elements ==="
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'clickable="true"' || true
+            echo "=== Tapping PIN 0 at (540,2249) x4 ==="
             adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249
             sleep 4
             adb exec-out screencap -p > screenshots/enroll_02_after_pin.png || true
             echo "=== Screen after PIN ==="
-            adb shell uiautomator dump /dev/tty 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
-            echo "=== Tapping I-Agree / Next (bottom-right) ==="
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
+            echo "=== Tapping agree/next ==="
             adb shell input tap 900 2249
             sleep 4
             adb exec-out screencap -p > screenshots/enroll_03_after_agree.png || true
             echo "=== Screen after agree ==="
-            adb shell uiautomator dump /dev/tty 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
             echo "=== Enrolling fingerprint ==="
             for i in $(seq 1 25); do adb -e emu finger touch 1; sleep 0.5; done
             sleep 2
             adb exec-out screencap -p > screenshots/enroll_04_after_touch.png || true
-            echo "=== Tapping Done ==="
+            echo "=== Screen after touches ==="
+            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
             adb shell input tap 900 2249
             sleep 1
             adb shell input keyevent 3
