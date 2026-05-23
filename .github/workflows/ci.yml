@@ -99,14 +99,14 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-v5
+          key: avd-${{ matrix.api-level }}-default-v1
 
       - name: Create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis
+          target: default
           arch: x86_64
           profile: pixel_6
           force-avd-creation: false
@@ -122,7 +122,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis
+          target: default
           arch: x86_64
           profile: pixel_6
           force-avd-creation: false
@@ -133,16 +133,10 @@ jobs:
             adb root
             adb shell locksettings set-pin 0000
             adb shell setprop persist.vendor.fingerprint.virtual.enrollments 1
-            adb shell stop vendor.biometrics.fingerprint-service.ranchu
-            sleep 2
-            adb shell start vendor.biometrics.fingerprint-service.ranchu
-            sleep 3
             adb shell cmd fingerprint sync
             sleep 2
             echo "=== Fingerprint enrollment status ==="
-            adb shell dumpsys fingerprint 2>&1 | head -10
-            echo "=== HAL props ==="
-            adb shell getprop persist.vendor.fingerprint.virtual.enrollments
+            adb shell dumpsys fingerprint 2>&1 | head -5
             npm run test:ci
 
       - name: Upload Allure results
