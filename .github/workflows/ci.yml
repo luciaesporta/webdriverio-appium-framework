@@ -114,8 +114,17 @@ jobs:
           disable-animations: false
           script: |
             adb shell settings put global hide_error_dialogs 1
+            adb shell settings put global stay_on_while_plugged_in 3
+            adb shell settings put system screen_off_timeout 2147483647
             adb root
             adb shell locksettings set-pin 0000
+            adb shell input keyevent 224
+            sleep 1
+            adb shell input swipe 540 2000 540 800 300
+            sleep 1
+            adb shell input text 0000
+            adb shell input keyevent 66
+            sleep 2
             adb shell am start -a android.settings.FINGERPRINT_ENROLL
             sleep 4
             adb shell input tap 540 2200
@@ -143,15 +152,20 @@ jobs:
           script: |
             adb shell settings put global hide_error_dialogs 1
             adb root
+            adb shell input keyevent 224
+            sleep 1
+            adb shell input swipe 540 2000 540 800 300
+            sleep 1
+            adb shell input text 0000
+            adb shell input keyevent 66
+            sleep 2
             mkdir -p screenshots
             adb shell am start -a android.settings.FINGERPRINT_ENROLL
             sleep 4
             adb exec-out screencap -p > screenshots/enroll_01_intro.png || true
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml | tr '>' '\n' | grep -i "agree\|next\|start\|enroll\|add\|fingerprint" || true
             adb shell input tap 540 2200
             sleep 3
             adb exec-out screencap -p > screenshots/enroll_02_after_agree.png || true
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml | tr '>' '\n' | grep -i "pin\|password\|confirm\|enter\|sensor\|touch\|finger" || true
             adb shell input text 0000
             adb shell input keyevent 66
             sleep 3
