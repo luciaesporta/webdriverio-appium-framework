@@ -140,19 +140,18 @@ jobs:
             adb shell am start -a android.settings.FINGERPRINT_ENROLL
             sleep 8
             adb exec-out screencap -p > screenshots/enroll_01_pin.png || true
-            echo "=== PIN screen elements ==="
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'clickable="true"' || true
-            echo "=== Tapping PIN 0 at (540,2249) x4 ==="
+            echo "=== Entering PIN 0000 on keyboard ==="
             adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249 && sleep 0.5 && adb shell input tap 540 2249
-            sleep 4
-            adb exec-out screencap -p > screenshots/enroll_02_after_pin.png || true
-            echo "=== Screen after PIN ==="
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
-            echo "=== Tapping agree/next ==="
+            sleep 1
+            echo "=== Submitting PIN (Enter key) ==="
             adb shell input tap 900 2249
             sleep 4
-            adb exec-out screencap -p > screenshots/enroll_03_after_agree.png || true
-            echo "=== Screen after agree ==="
+            adb exec-out screencap -p > screenshots/enroll_02_intro.png || true
+            echo "=== Tapping MORE → I AGREE on intro ==="
+            adb shell input tap 911 2242 && sleep 2 && adb shell input tap 911 2242 && sleep 2 && adb shell input tap 911 2242 && sleep 2 && adb shell input tap 911 2242
+            sleep 4
+            adb exec-out screencap -p > screenshots/enroll_03_find_sensor.png || true
+            echo "=== Screen before touches ==="
             adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
             echo "=== Enrolling fingerprint ==="
             for i in $(seq 1 25); do adb -e emu finger touch 1; sleep 0.5; done
@@ -160,7 +159,7 @@ jobs:
             adb exec-out screencap -p > screenshots/enroll_04_after_touch.png || true
             echo "=== Screen after touches ==="
             adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml 2>/dev/null | tr '>' '\n' | grep 'text="[^"]' | head -10 || true
-            adb shell input tap 900 2249
+            adb shell input tap 911 2242
             sleep 1
             adb shell input keyevent 3
             echo "=== Fingerprint enrollment status ==="
