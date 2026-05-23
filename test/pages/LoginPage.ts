@@ -26,10 +26,6 @@ class LoginPage extends BaseScreen {
     return $('id=android:id/button1');
   }
 
-  private get biometricsSwitch() {
-    return $('~Biometrics');
-  }
-
   private get emailError() {
     return $('//android.widget.TextView[contains(@text,"valid email")]');
   }
@@ -131,8 +127,12 @@ class LoginPage extends BaseScreen {
 
   async toggleBiometrics(): Promise<void> {
     await step('Toggle biometrics switch', async () => {
-      await this.scrollTo(this.biometricsSwitch);
-      await this.tap(this.biometricsSwitch);
+      const toggle = $(
+        'android=new UiScrollable(new UiSelector().scrollable(true))' +
+          '.scrollIntoView(new UiSelector().description("Biometrics"))',
+      );
+      await toggle.waitForDisplayed();
+      await toggle.click();
     });
   }
 
