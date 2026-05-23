@@ -131,32 +131,18 @@ jobs:
           script: |
             adb shell settings put global hide_error_dialogs 1
             adb root
-            adb shell input keyevent 82
-            sleep 1
-            mkdir -p screenshots
-            adb exec-out screencap -p > screenshots/enroll_00_initial.png || true
             adb shell locksettings set-pin 0000
-            adb shell am start -a android.settings.FINGERPRINT_ENROLL
-            sleep 4
-            adb exec-out screencap -p > screenshots/enroll_01_intro.png || true
-            adb shell uiautomator dump /sdcard/ui.xml 2>/dev/null && adb shell cat /sdcard/ui.xml | tr '>' '\n' | grep -i "agree\|next\|start\|button\|I agree" || true
-            adb shell input tap 540 2200
+            adb shell setprop persist.vendor.fingerprint.virtual.enrollments 1
+            adb shell stop vendor.biometrics.fingerprint-service.ranchu
+            sleep 2
+            adb shell start vendor.biometrics.fingerprint-service.ranchu
             sleep 3
-            adb exec-out screencap -p > screenshots/enroll_02_after_tap.png || true
-            adb shell input text 0000
-            adb shell input keyevent 66
-            sleep 3
-            adb exec-out screencap -p > screenshots/enroll_03_after_pin.png || true
-            for i in $(seq 1 20); do adb -e emu finger touch 1; sleep 0.5; done
-            sleep 1
-            adb exec-out screencap -p > screenshots/enroll_04_after_touches.png || true
-            adb shell input tap 540 2200
-            sleep 1
-            adb shell input keyevent 3
-            sleep 1
+            adb shell cmd fingerprint sync
+            sleep 2
             echo "=== Fingerprint enrollment status ==="
-            adb shell dumpsys fingerprint 2>&1 | head -5
-            echo "=== Running tests ==="
+            adb shell dumpsys fingerprint 2>&1 | head -10
+            echo "=== HAL props ==="
+            adb shell getprop persist.vendor.fingerprint.virtual.enrollments
             npm run test:ci
 
       - name: Upload Allure results
