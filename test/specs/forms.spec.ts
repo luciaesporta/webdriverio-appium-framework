@@ -13,6 +13,14 @@ describe('Forms screen', () => {
     expect(await FormsPage.getEchoedText()).toBe(sample);
   });
 
+  it('@regression clears the echoed result after retyping a new value', async () => {
+    await FormsPage.typeText('wrong input');
+    expect(await FormsPage.getEchoedText()).toBe('wrong input');
+
+    await FormsPage.typeText('corrected input');
+    expect(await FormsPage.getEchoedText()).toBe('corrected input');
+  });
+
   it('@regression toggles the switch label between on and off', async () => {
     const before = (await FormsPage.getSwitchText()).toLowerCase();
     await FormsPage.toggleSwitch();

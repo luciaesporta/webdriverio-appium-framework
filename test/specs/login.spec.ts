@@ -119,14 +119,16 @@ describe('Login form', () => {
     await LoginPage.dismissAlert();
   });
 
-  it('@regression clears the inline error after retyping a valid value', async () => {
+  it('@regression clears the inline error after resubmitting with a valid value', async () => {
     const errors = await LoginPage.submitAndReadInlineErrors(
       invalidEmailUser.email,
       invalidEmailUser.password,
     );
     expect(errors.email).toBe(true);
 
-    await LoginPage.setEmail(validUser.email);
+    const title = await LoginPage.submitAndReadAlertTitle(validUser.email, validUser.password);
+    expect(title).toBe('Success');
+    await LoginPage.dismissAlert();
     expect(await LoginPage.hasEmailError()).toBe(false);
   });
 

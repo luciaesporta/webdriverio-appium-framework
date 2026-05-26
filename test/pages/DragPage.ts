@@ -40,7 +40,7 @@ class DragPage extends BaseScreen {
         elementId: await source.elementId,
         endX: end.x,
         endY: end.y,
-        speed: 1000,
+        speed: 500,
       });
     });
   }
