@@ -119,6 +119,17 @@ describe('Login form', () => {
     await LoginPage.dismissAlert();
   });
 
+  it('@regression clears the inline error after retyping a valid value', async () => {
+    const errors = await LoginPage.submitAndReadInlineErrors(
+      invalidEmailUser.email,
+      invalidEmailUser.password,
+    );
+    expect(errors.email).toBe(true);
+
+    await LoginPage.setEmail(validUser.email);
+    expect(await LoginPage.hasEmailError()).toBe(false);
+  });
+
   it('@regression keeps the LOGIN button tappable regardless of field state', async () => {
     expect(await LoginPage.isLoginButtonEnabled()).toBe(true);
 
