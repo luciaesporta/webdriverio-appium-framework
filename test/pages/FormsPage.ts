@@ -55,13 +55,18 @@ class FormsPage extends BaseScreen {
   async selectDropdownOption(option: string): Promise<void> {
     await step(`Select dropdown option "${option}"`, async () => {
       await this.tap(this.dropdown);
-      const optionEl = await $(`android=new UiSelector().text("${option}")`);
+      const optionEl = await $(
+        `android=new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text("${option}"))`,
+      );
+      await optionEl.waitForDisplayed({ timeout: 5000 });
       await optionEl.click();
     });
   }
 
   async getDropdownText(): Promise<string> {
-    return this.getText(this.dropdown);
+    const el = this.$el(this.dropdown);
+    await el.waitForDisplayed();
+    return el.getText();
   }
 }
 
