@@ -55,9 +55,8 @@ class FormsPage extends BaseScreen {
   async selectDropdownOption(option: string): Promise<void> {
     await step(`Select dropdown option "${option}"`, async () => {
       await this.tap(this.dropdown);
-      const optionEl = await $(
-        `android=new UiSelector().resourceId("android:id/text1").text("${option}")`,
-      );
+      await browser.pause(1000);
+      const optionEl = await $(`//*[@text="${option}"]`);
       await optionEl.waitForExist({ timeout: 5000 });
       await optionEl.click();
     });
