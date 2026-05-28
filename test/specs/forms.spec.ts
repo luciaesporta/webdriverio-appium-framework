@@ -21,6 +21,12 @@ describe('Forms screen', () => {
     expect(await FormsPage.getEchoedText()).toBe('corrected input');
   });
 
+  it('@regression F-03 special characters and emojis render correctly', async () => {
+    const special = '¡Hola! @#$%^& 🚀🔥';
+    await FormsPage.typeText(special);
+    expect(await FormsPage.getEchoedText()).toBe(special);
+  });
+
   it('@regression F-02 long text (>50 chars) reflects completely in result label', async () => {
     const longText = 'A'.repeat(51);
     await FormsPage.typeText(longText);
