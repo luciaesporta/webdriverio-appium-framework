@@ -21,6 +21,15 @@ describe('Forms screen', () => {
     expect(await FormsPage.getEchoedText()).toBe('corrected input');
   });
 
+  it('@regression F-01 clearing input leaves result label empty', async () => {
+    await FormsPage.typeText('temporary text');
+    expect(await FormsPage.getEchoedText()).toBe('temporary text');
+
+    await FormsPage.clearInput();
+    const result = await FormsPage.getEchoedText();
+    expect(result === '' || result === 'You typed:').toBeTruthy();
+  });
+
   it('@regression toggles the switch label between on and off', async () => {
     const before = (await FormsPage.getSwitchText()).toLowerCase();
     await FormsPage.toggleSwitch();

@@ -28,6 +28,14 @@ class FormsPage extends BaseScreen {
     );
   }
 
+  async clearInput(): Promise<void> {
+    await step('Clear the text input', async () => {
+      const el = this.$el(this.textInput);
+      await el.waitForDisplayed();
+      await el.clearValue();
+    });
+  }
+
   async getEchoedText(): Promise<string> {
     return this.getText(this.textInputResult);
   }
