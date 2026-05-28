@@ -21,6 +21,12 @@ describe('Forms screen', () => {
     expect(await FormsPage.getEchoedText()).toBe('corrected input');
   });
 
+  it('@regression F-02 long text (>50 chars) reflects completely in result label', async () => {
+    const longText = 'A'.repeat(51);
+    await FormsPage.typeText(longText);
+    expect(await FormsPage.getEchoedText()).toBe(longText);
+  });
+
   it('@regression F-01 clearing input leaves result label empty', async () => {
     await FormsPage.typeText('temporary text');
     expect(await FormsPage.getEchoedText()).toBe('temporary text');
