@@ -44,6 +44,15 @@ describe('Forms screen', () => {
     expect(result === '' || result === 'You typed:').toBeTruthy();
   });
 
+  it('@regression F-04 dropdown displays correct text for each option', async () => {
+    const options = ['webdriver.io', 'Appium', 'This app is awesome'];
+
+    for (const option of options) {
+      await FormsPage.selectDropdownOption(option);
+      expect(await FormsPage.getDropdownText()).toContain(option);
+    }
+  });
+
   it('@regression toggles the switch label between on and off', async () => {
     const before = (await FormsPage.getSwitchText()).toLowerCase();
     await FormsPage.toggleSwitch();
