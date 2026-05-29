@@ -52,16 +52,13 @@ class FormsPage extends BaseScreen {
     return $('~Dropdown');
   }
 
-  private get dropdownPicker() {
-    return $('~Dropdown picker');
-  }
-
   async selectDropdownOption(option: string): Promise<void> {
     await step(`Select dropdown option "${option}"`, async () => {
       await this.tap(this.dropdown);
-      const picker = this.$el(this.dropdownPicker);
-      await picker.waitForExist({ timeout: 5000 });
-      await picker.selectByAttribute('label', option);
+      await browser.pause(1000);
+      const optionEl = await $(`//*[@text="${option}"]`);
+      await optionEl.waitForExist({ timeout: 5000 });
+      await optionEl.click();
     });
   }
 
