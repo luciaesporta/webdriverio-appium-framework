@@ -54,7 +54,9 @@ class FormsPage extends BaseScreen {
 
   async selectDropdownOption(option: string): Promise<void> {
     await step(`Select dropdown option "${option}"`, async () => {
-      await this.tap(this.dropdown);
+      const el = this.$el(this.dropdown);
+      await el.scrollIntoView();
+      await el.click();
       const optionEl = await $(`android=new UiSelector().text("${option}")`);
       await optionEl.waitForExist({ timeout: 5000 });
       await optionEl.click();
@@ -64,7 +66,11 @@ class FormsPage extends BaseScreen {
   async getDropdownText(): Promise<string> {
     const el = this.$el(this.dropdown);
     await el.waitForDisplayed();
-    return (await el.getText()) || (await el.getAttribute('text')) || '';
+    const text = await el.getText();
+    if (text) return text;
+    const child = await el.$('android.widget.TextView');
+    if (await child.isExisting()) return child.getText();
+    return (await el.getAttribute('text')) || '';
   }
 }
 
