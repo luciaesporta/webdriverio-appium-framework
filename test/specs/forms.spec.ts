@@ -45,7 +45,7 @@ describe('Forms screen', () => {
   });
 
   it('@regression F-04 dropdown displays correct text for each option', async () => {
-    const options = ['webdriver.io', 'Appium', 'This app is awesome'];
+    const options = ['webdriver.io is awesome', 'Appium is awesome', 'This app is awesome'];
 
     for (const option of options) {
       await FormsPage.selectDropdownOption(option);
