@@ -87,16 +87,33 @@ class FormsPage extends BaseScreen {
     });
   }
 
-  async isActiveButtonEnabled(): Promise<boolean> {
-    const el = this.$el(this.activeButton);
-    await el.waitForDisplayed();
-    return el.isEnabled();
+  private get activeButtonAlertMessage() {
+    return $('id=android:id/message');
   }
 
-  async isInactiveButtonEnabled(): Promise<boolean> {
-    const el = this.$el(this.inactiveButton);
-    await el.waitForDisplayed();
-    return el.isEnabled();
+  private get activeButtonAlertOk() {
+    return $('id=android:id/button1');
+  }
+
+  async waitForActiveButtonAlert(): Promise<string> {
+    return step('Wait for Active button alert', () =>
+      this.getText(this.activeButtonAlertMessage),
+    );
+  }
+
+  async dismissActiveButtonAlert(): Promise<void> {
+    await step('Dismiss Active button alert', async () => {
+      await this.tap(this.activeButtonAlertOk);
+      await this.activeButtonAlertMessage.waitForDisplayed({ reverse: true, timeout: 5000 });
+    });
+  }
+
+  /** RN disabled TouchableOpacity still reports enabled on Android; verify by absence of alert. */
+  async hasActiveButtonAlert(timeout = 2000): Promise<boolean> {
+    return this.activeButtonAlertMessage
+      .waitForDisplayed({ timeout })
+      .then(() => true)
+      .catch(() => false);
   }
 
   async getDropdownText(): Promise<string> {
