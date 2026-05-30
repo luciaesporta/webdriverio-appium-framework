@@ -96,9 +96,7 @@ class FormsPage extends BaseScreen {
   }
 
   async waitForActiveButtonAlert(): Promise<string> {
-    return step('Wait for Active button alert', () =>
-      this.getText(this.activeButtonAlertMessage),
-    );
+    return step('Wait for Active button alert', () => this.getText(this.activeButtonAlertMessage));
   }
 
   async dismissActiveButtonAlert(): Promise<void> {
