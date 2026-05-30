@@ -48,27 +48,30 @@ class FormsPage extends BaseScreen {
     return this.getText(this.switchText);
   }
 
-  private get dropdown() {
-    return $('~Dropdown');
-  }
-
-  private get dropdownPicker() {
-    return $('~Dropdown picker');
+  private get spinner() {
+    return $(
+      'android=new UiScrollable(new UiSelector().scrollable(true))' +
+        '.scrollIntoView(new UiSelector().className("android.widget.Spinner"))',
+    );
   }
 
   async selectDropdownOption(option: string): Promise<void> {
     await step(`Select dropdown option "${option}"`, async () => {
-      const el = this.$el(this.dropdown);
-      await el.scrollIntoView();
-      await el.click();
-      const optionEl = await $(`android=new UiSelector().text("${option}")`);
+      const spin = this.$el(this.spinner);
+      await spin.waitForDisplayed({ timeout: 10000 });
+      await spin.click();
+      const optionEl = await $(
+        `android=new UiSelector().className("android.widget.CheckedTextView").text("${option}")`,
+      );
       await optionEl.waitForExist({ timeout: 5000 });
       await optionEl.click();
     });
   }
 
   async getDropdownText(): Promise<string> {
-    return this.getText(this.dropdownPicker);
+    const spin = this.$el(this.spinner);
+    await spin.waitForDisplayed();
+    return spin.getText();
   }
 }
 
