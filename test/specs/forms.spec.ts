@@ -53,6 +53,22 @@ describe('Forms screen', () => {
     }
   });
 
+  it('@regression F-05 Active button is tappable and Inactive button produces no effect', async () => {
+    expect(await FormsPage.isActiveButtonEnabled()).toBe(true);
+    expect(await FormsPage.isInactiveButtonEnabled()).toBe(false);
+
+    await FormsPage.tapActiveButton();
+    // Active button should trigger native alert
+    const alert = await $('id=android:id/message');
+    await alert.waitForDisplayed({ timeout: 5000 });
+    const alertText = await alert.getText();
+    expect(alertText).toBeTruthy();
+
+    // Dismiss alert
+    const okButton = await $('id=android:id/button1');
+    await okButton.click();
+  });
+
   it('@regression toggles the switch label between on and off', async () => {
     const before = (await FormsPage.getSwitchText()).toLowerCase();
     await FormsPage.toggleSwitch();

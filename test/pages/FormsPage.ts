@@ -63,6 +63,42 @@ class FormsPage extends BaseScreen {
     });
   }
 
+  private get activeButton() {
+    return $('~button-Active');
+  }
+
+  private get inactiveButton() {
+    return $('~button-Inactive');
+  }
+
+  async tapActiveButton(): Promise<void> {
+    await step('Tap the Active button', async () => {
+      const el = this.$el(this.activeButton);
+      await el.scrollIntoView();
+      await el.click();
+    });
+  }
+
+  async tapInactiveButton(): Promise<void> {
+    await step('Tap the Inactive button', async () => {
+      const el = this.$el(this.inactiveButton);
+      await el.scrollIntoView();
+      await el.click();
+    });
+  }
+
+  async isActiveButtonEnabled(): Promise<boolean> {
+    const el = this.$el(this.activeButton);
+    await el.waitForDisplayed();
+    return el.isEnabled();
+  }
+
+  async isInactiveButtonEnabled(): Promise<boolean> {
+    const el = this.$el(this.inactiveButton);
+    await el.waitForDisplayed();
+    return el.isEnabled();
+  }
+
   async getDropdownText(): Promise<string> {
     const dropdown = this.$el(this.dropdown);
     await dropdown.waitForDisplayed();
