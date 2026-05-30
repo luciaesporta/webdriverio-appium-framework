@@ -22,6 +22,10 @@ class FormsPage extends BaseScreen {
     return $('~switch-text');
   }
 
+  private get dropdown() {
+    return $('~Dropdown');
+  }
+
   async typeText(text: string): Promise<void> {
     await step(`Type ${JSON.stringify(text)} into the text input`, () =>
       this.typeInto(this.textInput, text),
@@ -48,30 +52,34 @@ class FormsPage extends BaseScreen {
     return this.getText(this.switchText);
   }
 
-  private get spinner() {
-    return $(
-      'android=new UiScrollable(new UiSelector().scrollable(true))' +
-        '.scrollIntoView(new UiSelector().className("android.widget.Spinner"))',
-    );
-  }
-
   async selectDropdownOption(option: string): Promise<void> {
     await step(`Select dropdown option "${option}"`, async () => {
-      const spin = this.$el(this.spinner);
-      await spin.waitForDisplayed({ timeout: 10000 });
-      await spin.click();
-      const optionEl = await $(
-        `android=new UiSelector().className("android.widget.CheckedTextView").text("${option}")`,
-      );
-      await optionEl.waitForExist({ timeout: 5000 });
+      const el = this.$el(this.dropdown);
+      await el.scrollIntoView();
+      await el.click();
+      const optionEl = await $(`android=new UiSelector().text("${option}")`);
+      await optionEl.waitForDisplayed({ timeout: 5000 });
       await optionEl.click();
     });
   }
 
   async getDropdownText(): Promise<string> {
-    const spin = this.$el(this.spinner);
-    await spin.waitForDisplayed();
-    return spin.getText();
+    const dropdown = this.$el(this.dropdown);
+    await dropdown.waitForDisplayed();
+
+    const input = dropdown.$('android.widget.EditText');
+    if (await input.isExisting()) {
+      const value = (await input.getText()).trim();
+      if (value) return value;
+    }
+
+    const textViews = await dropdown.$$('android.widget.TextView');
+    for (const view of textViews) {
+      const text = (await view.getText()).trim();
+      if (/[a-zA-Z]/.test(text)) return text;
+    }
+
+    return (await dropdown.getText()).trim();
   }
 }
 
