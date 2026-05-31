@@ -127,13 +127,7 @@ class FormsPage extends BaseScreen {
   }
 
   async tapAlertButton(): Promise<void> {
-    await step('Tap the alert button', async () => {
-      const el = await $(
-        'android=new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().description("button-Alert"))',
-      );
-      await el.waitForDisplayed({ timeout: 5000 });
-      await el.click();
-    });
+    await step('Tap the Active button to open the alert', () => this.tapActiveButton());
   }
 
   async getAlertTitle(): Promise<string> {
