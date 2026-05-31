@@ -50,6 +50,25 @@ Subject line should be ≤ 72 characters, imperative mood, no trailing period.
 
 Tag every E2E `it()` block with `@smoke` (critical happy path) or `@regression` (validation, gestures, edge cases). Tag selection is done via `mochaOpts.grep`.
 
+## E2E tests and locators (humans and AI assistants)
+
+Wrong or invented selectors are the most common cause of red CI in this repo. Before adding or changing anything under `test/`:
+
+1. **Verify locators** against the app under test: [native-demo-app v2.2.0](https://github.com/webdriverio/native-demo-app/tree/v2.2.0) (same APK as CI). On Android, `testProperties(id)` becomes `accessibilityLabel` → use `~id` (e.g. `~button-Active`, not `~button-Alert`).
+2. **Read the source** of the screen or component (`FormComponents.tsx`, `Button.tsx`, …) — do not assume native widgets (`Spinner`, etc.) without checking React Native structure.
+3. **Follow the POM**: selectors only in `test/pages/`; specs call semantic methods. Use `scrollIntoView()` when the control is below the fold (Forms `ScrollView`).
+4. **Assert behavior**, not fragile Appium state — e.g. React Native `disabled={true}` on `TouchableOpacity` may still report `isEnabled() === true` on Android; prefer checks like “alert did not appear”.
+5. **Before push**: `npm run typecheck && npm run lint && npm run format:check` (CI lint does not run the emulator).
+
+**Cursor / agent rules** (optional, local only — `.cursor/` is gitignored):
+
+Copy or keep under `.cursor/rules/` in your machine (not published on push):
+
+- `mobile-e2e-practices.mdc` — when editing `test/**/*.ts`
+- `mobile-agent-workflow.mdc` — every session in Cursor for this repo
+
+If you use Claude Code or another assistant outside Cursor, paste the checklist from that section or from this doc when writing tests.
+
 ## Adding a new screen
 
 See [`README.md` › Adding a new screen](./README.md#adding-a-new-screen). The short version:

@@ -1,5 +1,8 @@
 node_modules/
 
+# Cursor IDE — reglas y config local del agente (no subir al repo)
+.cursor/
+
 logs
 *.log
 npm-debug.log*
