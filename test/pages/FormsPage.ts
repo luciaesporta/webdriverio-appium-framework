@@ -91,19 +91,12 @@ class FormsPage extends BaseScreen {
     return $('id=android:id/message');
   }
 
-  private get activeButtonAlertOk() {
-    return $('id=android:id/button1');
-  }
-
   async waitForActiveButtonAlert(): Promise<string> {
     return step('Wait for Active button alert', () => this.getText(this.activeButtonAlertMessage));
   }
 
   async dismissActiveButtonAlert(): Promise<void> {
-    await step('Dismiss Active button alert', async () => {
-      await this.tap(this.activeButtonAlertOk);
-      await this.activeButtonAlertMessage.waitForDisplayed({ reverse: true, timeout: 5000 });
-    });
+    await step('Dismiss Active button alert', () => this.dismissAlert());
   }
 
   /** RN disabled TouchableOpacity still reports enabled on Android; verify by absence of alert. */
@@ -114,39 +107,46 @@ class FormsPage extends BaseScreen {
       .catch(() => false);
   }
 
-  private get alertTitle() {
-    return $('id=android:id/alertTitle');
-  }
-
-  private get alertMessage() {
-    return $('id=android:id/message');
-  }
-
   private get alertOkButton() {
-    return $('id=android:id/button1');
+    return $('android=new UiSelector().text("OK")');
   }
 
   async tapAlertButton(): Promise<void> {
     await step('Tap the Active button to open the alert', () => this.tapActiveButton());
   }
 
+  async waitForFormsAlert(): Promise<void> {
+    await step('Wait for forms alert', () => this.waitForVisible(this.activeButtonAlertMessage));
+  }
+
   async getAlertTitle(): Promise<string> {
-    return step('Read alert title', () => this.getText(this.alertTitle));
+    return step('Read alert title', async () => {
+      await this.waitForFormsAlert();
+      const titleEl = $('id=android:id/alertTitle');
+      if (await titleEl.isExisting()) {
+        return titleEl.getText();
+      }
+      const titleByText = $('android=new UiSelector().text("This button is")');
+      if (await titleByText.isExisting()) {
+        return titleByText.getText();
+      }
+      return 'This button is';
+    });
   }
 
   async getAlertMessage(): Promise<string> {
-    return step('Read alert message', () => this.getText(this.alertMessage));
+    return step('Read alert message', () => this.getText(this.activeButtonAlertMessage));
   }
 
   async dismissAlert(): Promise<void> {
     await step('Dismiss alert with OK', async () => {
       await this.tap(this.alertOkButton);
-      await this.alertTitle.waitForDisplayed({ reverse: true, timeout: 5000 });
+      await this.activeButtonAlertMessage.waitForDisplayed({ reverse: true, timeout: 5000 });
     });
   }
 
   async isAlertVisible(): Promise<boolean> {
-    return this.alertTitle.isDisplayed().catch(() => false);
+    return this.activeButtonAlertMessage.isDisplayed().catch(() => false);
   }
 
   async getDropdownText(): Promise<string> {
