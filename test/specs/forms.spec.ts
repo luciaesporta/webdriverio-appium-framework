@@ -64,6 +64,19 @@ describe('Forms screen', () => {
     expect(await FormsPage.hasActiveButtonAlert()).toBe(false);
   });
 
+  it('@smoke F-06 alert appears and closes with OK', async () => {
+    await FormsPage.tapAlertButton();
+
+    const title = await FormsPage.getAlertTitle();
+    expect(title).toBeTruthy();
+
+    const message = await FormsPage.getAlertMessage();
+    expect(message).toBeTruthy();
+
+    await FormsPage.dismissAlert();
+    expect(await FormsPage.isAlertVisible()).toBe(false);
+  });
+
   it('@regression toggles the switch label between on and off', async () => {
     const before = (await FormsPage.getSwitchText()).toLowerCase();
     await FormsPage.toggleSwitch();

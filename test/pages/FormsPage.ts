@@ -114,6 +114,49 @@ class FormsPage extends BaseScreen {
       .catch(() => false);
   }
 
+  private get alertButton() {
+    return $('~button-Alert');
+  }
+
+  private get alertTitle() {
+    return $('id=android:id/alertTitle');
+  }
+
+  private get alertMessage() {
+    return $('id=android:id/message');
+  }
+
+  private get alertOkButton() {
+    return $('id=android:id/button1');
+  }
+
+  async tapAlertButton(): Promise<void> {
+    await step('Tap the alert button', async () => {
+      const el = this.$el(this.alertButton);
+      await el.scrollIntoView();
+      await el.click();
+    });
+  }
+
+  async getAlertTitle(): Promise<string> {
+    return step('Read alert title', () => this.getText(this.alertTitle));
+  }
+
+  async getAlertMessage(): Promise<string> {
+    return step('Read alert message', () => this.getText(this.alertMessage));
+  }
+
+  async dismissAlert(): Promise<void> {
+    await step('Dismiss alert with OK', async () => {
+      await this.tap(this.alertOkButton);
+      await this.alertTitle.waitForDisplayed({ reverse: true, timeout: 5000 });
+    });
+  }
+
+  async isAlertVisible(): Promise<boolean> {
+    return this.alertTitle.isDisplayed().catch(() => false);
+  }
+
   async getDropdownText(): Promise<string> {
     const dropdown = this.$el(this.dropdown);
     await dropdown.waitForDisplayed();
