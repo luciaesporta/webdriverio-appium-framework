@@ -12,7 +12,7 @@ describe('Drag and drop screen', () => {
     expect(initialCount).toBeGreaterThan(0);
 
     await DragPage.dragPieceTo('l1', 'l1');
-
-    expect(await DragPage.countRemainingPieces()).toBeLessThan(initialCount);
+    await DragPage.waitForPieceConsumed('l1');
+    expect(await DragPage.countRemainingPieces()).toBe(initialCount - 1);
   });
 });
