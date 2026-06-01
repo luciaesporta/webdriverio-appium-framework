@@ -6,8 +6,8 @@ type Cell = 'l1' | 'l2' | 'l3' | 'c1' | 'c2' | 'c3' | 'r1' | 'r2' | 'r3';
 
 const PIECES: Cell[] = ['l1', 'l2', 'l3', 'c1', 'c2', 'c3', 'r1', 'r2', 'r3'];
 
-const DRAG_PRESS_MS = 250;
-const DRAG_MOVE_MS = 1500;
+const DRAG_PRESS_MS = 500;
+const DRAG_MOVE_MS = 2000;
 
 class DragPage extends BaseScreen {
   protected get screen() {
@@ -26,37 +26,40 @@ class DragPage extends BaseScreen {
     source: ChainablePromiseElement,
     destination: ChainablePromiseElement,
   ): Promise<void> {
-    const sourceSize = await source.getSize();
-    const destSize = await destination.getSize();
+    const srcLoc = await source.getLocation();
+    const srcSize = await source.getSize();
+    const dstLoc = await destination.getLocation();
+    const dstSize = await destination.getSize();
+
+    const srcX = Math.round(srcLoc.x + srcSize.width / 2);
+    const srcY = Math.round(srcLoc.y + srcSize.height / 2);
+    const dstX = Math.round(dstLoc.x + dstSize.width / 2);
+    const dstY = Math.round(dstLoc.y + dstSize.height / 2);
 
     await browser
       .action('pointer', { parameters: { pointerType: 'touch' } })
-      .move({
-        origin: source,
-        x: Math.round(sourceSize.width / 2),
-        y: Math.round(sourceSize.height / 2),
-      })
+      .move({ x: srcX, y: srcY })
       .down({ button: 0 })
       .pause(DRAG_PRESS_MS)
-      .move({
-        origin: destination,
-        x: Math.round(destSize.width / 2),
-        y: Math.round(destSize.height / 2),
-        duration: DRAG_MOVE_MS,
-      })
+      .move({ x: dstX, y: dstY, duration: DRAG_MOVE_MS })
       .pause(200)
       .up({ button: 0 })
       .perform();
     await browser.releaseActions();
   }
 
-  async dragPieceTo(piece: Cell, target: Cell): Promise<void> {
+  async dragPieceTo(piece: Cell, target: Cell, retries = 3): Promise<void> {
     await step(`Drag piece "${piece}" onto drop zone "${target}"`, async () => {
       const source = this.$el(this.dragPiece(piece));
       const destination = this.$el(this.dropTarget(target));
       await source.waitForDisplayed({ timeout: this.defaultTimeout });
       await destination.waitForDisplayed({ timeout: this.defaultTimeout });
-      await this.pointerDragBetween(source, destination);
+
+      for (let attempt = 0; attempt < retries; attempt++) {
+        await this.pointerDragBetween(source, destination);
+        await browser.pause(500);
+        if (!(await this.isPieceVisible(piece))) return;
+      }
     });
   }
 
