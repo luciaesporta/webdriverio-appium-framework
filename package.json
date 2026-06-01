@@ -18,7 +18,9 @@
     "appium:setup": "appium driver install uiautomator2",
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
-    "allure:serve": "allure serve allure-results"
+    "allure:serve": "allure serve allure-results",
+    "dump-ui": "bash scripts/dump-ui.sh",
+    "prepare": "husky"
   },
   "keywords": [
     "webdriverio",
@@ -30,6 +32,12 @@
     "ios",
     "qa"
   ],
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
   "author": "Lucia Esporta",
   "license": "ISC",
   "devDependencies": {
@@ -50,6 +58,8 @@
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-wdio": "^9.27.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3",

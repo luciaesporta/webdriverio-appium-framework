@@ -3,6 +3,9 @@ node_modules/
 # Cursor IDE — reglas y config local del agente (no subir al repo)
 .cursor/
 
+# Claude Code — instrucciones locales del asistente
+CLAUDE.md
+
 logs
 *.log
 npm-debug.log*
@@ -31,4 +34,5 @@ reports/
 .env.local
 
 screenshots/
+ui-dumps/
 
