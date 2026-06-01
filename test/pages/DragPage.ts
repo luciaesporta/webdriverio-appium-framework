@@ -57,8 +57,10 @@ class DragPage extends BaseScreen {
 
       for (let attempt = 0; attempt < retries; attempt++) {
         await this.pointerDragBetween(source, destination);
-        await browser.pause(500);
-        if (!(await this.isPieceVisible(piece))) return;
+        const consumed = await browser
+          .waitUntil(async () => !(await this.isPieceVisible(piece)), { timeout: 2000 })
+          .catch(() => false);
+        if (consumed) return;
       }
     });
   }
