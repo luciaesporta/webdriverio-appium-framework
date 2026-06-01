@@ -63,8 +63,6 @@ class DragPage extends BaseScreen {
   private async isPieceVisible(cell: Cell): Promise<boolean> {
     const el = this.dragPiece(cell);
     if (!(await el.isExisting())) return false;
-    const visible = await el.getAttribute('visible');
-    if (visible === 'false') return false;
     return el.isDisplayed();
   }
 
